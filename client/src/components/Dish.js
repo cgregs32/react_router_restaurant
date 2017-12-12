@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link, Redirect } from 'react-router-dom';
+import { Link} from 'react-router-dom';
 import { Button, Segment, Header, List } from 'semantic-ui-react';
 import axios from 'axios';
 
@@ -15,6 +15,16 @@ class Dish extends React.Component {
       });
   }
 
+  deleteDish = () => {
+    const {id} = this.state.dish
+    axios.delete(`/api/dishes/${id}`)
+      .then(res =>{
+        this.props.history.push('/menu')
+      }).catch(err => {
+
+      })
+  }
+
   displayDish = () => {
     const { id, name, ingredients, price } = this.state.dish;
     return (
@@ -24,7 +34,9 @@ class Dish extends React.Component {
           <List.Item>Price: ${price}</List.Item>
           <List.Item>Special Ingredient: {ingredients}</List.Item>
         </List>
+          <Button as={Link} to={`/dishes/${id}/edit`} color='orange'>Edit</Button>
           <Button as={Link} to={'/menu'}>Back to Menu</Button>
+          <Button color='red' onClick={() => this.deleteDish()}>Delete</Button>
       </Segment>
     );
   }
